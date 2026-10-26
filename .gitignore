@@ -1,0 +1,59 @@
+﻿# Python environments
+.venv/
+venv/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Playwright authentication state
+playwright/.auth/
+**/storage_state.json
+**/storageState.json
+**/*.auth.json
+
+# Generated reports, screenshots, and test output
+reports/*
+!reports/.gitkeep
+screenshots/*
+!screenshots/.gitkeep
+test-results/
+playwright-report/
+traces/
+videos/
+*.trace
+trace.zip
+*.webm
+*.har
+
+# Additional tool caches and coverage output
+.cache/
+**/.cache/
+.playwright/
+**/.playwright/
+.tox/
+.nox/
+.hypothesis/
+.pytype/
+.pyre/
+.pyright/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Playwright authentication state in common locations
+**/.auth/
+**/auth_state.json
+**/auth-state.json
+**/playwright_state.json
+**/playwright-state.json
+**/storage-state.json

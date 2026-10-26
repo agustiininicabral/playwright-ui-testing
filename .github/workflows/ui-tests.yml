@@ -1,0 +1,46 @@
+﻿name: UI tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Install Chromium and system dependencies
+        run: python -m playwright install --with-deps chromium
+
+      - name: Run local checks
+        run: python -m pytest -m local -q
+
+      - name: Run browser integration tests
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          python -m pytest -m integration --html=reports/integration-report.html --self-contained-html
+
+      - name: Upload test evidence
+        if: always() && github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-evidence
+          path: |
+            reports/
+            screenshots/
+          if-no-files-found: ignore
