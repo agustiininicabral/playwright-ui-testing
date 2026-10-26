@@ -86,3 +86,7 @@ Se usan únicamente las credenciales públicas de demostración documentadas por
 - Python 3.12 es la única versión ejecutada por CI; otras versiones no están validadas por el workflow.
 - Los pins de dependencias directas no fijan sus dependencias transitivas.
 - Los tests cubren el flujo de login de demostración, no autenticación de una aplicación bajo control del proyecto.
+
+## Licencia
+
+Este proyecto se distribuye bajo la licencia MIT. Consultá el archivo [LICENSE](LICENSE).
