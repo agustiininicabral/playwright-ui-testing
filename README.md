@@ -99,7 +99,7 @@ La ejecución manual corre primero los tests locales y luego las pruebas de inte
 
 ## Evidencia verificada de CI
 
-- [Ejecución de GitHub Actions — 27 de octubre de 2026](https://github.com/agustiininicabral/playwright-ui-testing/actions/runs/40450626918): **success**.
+- [Ejecución de GitHub Actions — 27 de octubre de 2026](https://github.com/agustiininicabral/playwright-ui-testing/actions/runs/40451073480): **success**.
 - Pasaron los **2 tests locales** y los **4 tests de navegador deterministas** sobre la fixture incluida.
 - `pip check`, formato y lint de Ruff finalizaron correctamente.
 - Los 4 tests de integración contra el sitio público se ejecutan manualmente para evitar que la disponibilidad de un tercero vuelva inestable cada `push` o pull request.
