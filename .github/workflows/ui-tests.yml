@@ -34,12 +34,14 @@ jobs:
       - name: Run Ruff lint checks
         run: ruff check tests
 
-      - name: Install Chromium and system dependencies
-        if: github.event_name == 'workflow_dispatch'
+      - name: Install Chromium for deterministic browser tests
         run: python -m playwright install --with-deps chromium
 
       - name: Run local checks
         run: python -m pytest -m local -q
+
+      - name: Run deterministic local browser tests
+        run: python -m pytest -m local_browser --html=reports/local-browser-report.html --self-contained-html
 
       - name: Run browser integration tests
         if: github.event_name == 'workflow_dispatch'
@@ -47,7 +49,7 @@ jobs:
           python -m pytest -m integration --html=reports/integration-report.html --self-contained-html
 
       - name: Upload test evidence
-        if: always() && github.event_name == 'workflow_dispatch'
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ui-test-evidence
