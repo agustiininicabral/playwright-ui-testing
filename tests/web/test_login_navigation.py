@@ -5,7 +5,9 @@ import pytest
 def test_login_page_loads_with_expected_form(page, base_url: str) -> None:
     from playwright.sync_api import expect
 
-    response = page.goto(f"{base_url}/practice-test-login/", wait_until="domcontentloaded")
+    response = page.goto(
+        f"{base_url}/practice-test-login/", wait_until="domcontentloaded"
+    )
 
     assert response is not None
     assert response.status == 200

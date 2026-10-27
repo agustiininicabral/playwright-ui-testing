@@ -39,7 +39,9 @@ def page(browser: Browser) -> Iterator[Page]:
 
 
 @pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo[object]) -> Iterator[None]:
+def pytest_runtest_makereport(
+    item: pytest.Item, call: pytest.CallInfo[object]
+) -> Iterator[None]:
     outcome = yield
     report = outcome.get_result()
 
@@ -61,7 +63,9 @@ def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo[object]) 
 
         screenshots_dir = item.config.rootpath / "screenshots"
         screenshots_dir.mkdir(parents=True, exist_ok=True)
-        file_name = re.sub(r"[^A-Za-z0-9_.-]+", "_", item.nodeid) + f"-{report.when}.png"
+        file_name = (
+            re.sub(r"[^A-Za-z0-9_.-]+", "_", item.nodeid) + f"-{report.when}.png"
+        )
         page.screenshot(path=str(screenshots_dir / file_name), full_page=True)
     except Exception:
         LOGGER.warning(
