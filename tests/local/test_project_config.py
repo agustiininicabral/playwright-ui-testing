@@ -19,6 +19,8 @@ def test_project_has_expected_setup_and_ci_files() -> None:
     expected_files = (
         "pytest.ini",
         "requirements.txt",
+        "requirements-dev.txt",
+        "pyproject.toml",
         "README.md",
         ".github/workflows/ui-tests.yml",
     )
