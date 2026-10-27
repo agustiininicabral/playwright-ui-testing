@@ -6,10 +6,11 @@ Framework de QA Automation para probar la interfaz de login de [Practice Test Au
 
 ## Alcance y casos
 
-La suite contiene 6 casos recopilables:
+La suite contiene 10 casos recopilables:
 
-- **2 locales:** comprueban las marcas pytest y la presencia de archivos de configuración. No abren un navegador ni realizan solicitudes de red.
-- **4 de integración:** verifican la carga del formulario, un login exitoso y dos variantes de credenciales inválidas. Requieren Chromium y acceso al sitio público.
+- **2 locales de configuración:** comprueban las marcas pytest y la presencia de archivos de configuración, sin navegador ni red.
+- **4 locales de navegador:** prueban la carga del formulario, login exitoso y dos variantes de credenciales inválidas sobre una página fixture incluida en el repositorio. Requieren Chromium, pero no acceden a Internet.
+- **4 de integración:** ejecutan los escenarios principales contra el sitio público Practice Test Automation. Requieren Chromium y acceso a Internet.
 
 El proyecto no prueba campos vacíos porque no hay un comportamiento esperado para esos campos especificado en el código o documentación disponible.
 
@@ -49,6 +50,13 @@ Ejecutar únicamente los tests locales, sin navegador ni Internet:
 python -m pytest -m local -q
 ```
 
+Ejecutar las pruebas de navegador deterministas (requiere Chromium, no Internet):
+
+```powershell
+python -m playwright install chromium
+python -m pytest -m local_browser -q
+```
+
 Ejecutar solo integración (requiere Chromium e Internet):
 
 ```powershell
@@ -80,7 +88,7 @@ python -m ruff check tests
 
 ## GitHub Actions
 
-En cada `push` y `pull_request`, el workflow ejecuta las comprobaciones de dependencias, formato, lint y pruebas locales. Chromium se instala solo en la ejecución manual; esa ejecución añade las pruebas de navegador.
+En cada `push` y `pull_request`, el workflow ejecuta las comprobaciones de dependencias, formato, lint, pruebas locales y los cuatro escenarios de navegador contra la fixture incluida. Chromium se instala en CI para esas pruebas deterministas. La ejecución manual añade además los cuatro escenarios de integración contra el sitio público.
 
 Para ejecutar integración manualmente:
 
@@ -88,7 +96,7 @@ Para ejecutar integración manualmente:
 2. Elegí **UI tests**.
 3. Seleccioná **Run workflow**.
 
-La ejecución manual corre primero los tests locales y luego las pruebas de integración. El workflow instala dependencias y Chromium en Ubuntu con Python 3.12. Al finalizar, carga el reporte HTML y las capturas como artefacto `ui-test-evidence`, incluso si hay fallos. El token de Actions tiene permiso de solo lectura sobre el contenido del repositorio. No se usan secretos de GitHub en los tests.
+La ejecución manual corre primero los tests locales y luego las pruebas de integración. El workflow instala dependencias y Chromium en Ubuntu con Python 3.12. Al finalizar, carga los reportes HTML y las capturas como artefacto `ui-test-evidence`, incluso si hay fallos. El token de Actions tiene permiso de solo lectura sobre el contenido del repositorio. No se usan secretos de GitHub en los tests.
 
 ## Evidencias y datos
 
