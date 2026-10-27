@@ -1,5 +1,7 @@
 # Playwright UI Testing
 
+![UI tests](https://github.com/agustiininicabral/playwright-ui-testing/actions/workflows/ui-tests.yml/badge.svg)
+
 Framework de QA Automation para probar la interfaz de login de [Practice Test Automation](https://practicetestautomation.com/practice-test-login/) con Python, pytest y Playwright.
 
 ## Alcance y casos
@@ -79,6 +81,8 @@ python -m ruff check tests
 ## GitHub Actions
 
 En cada `push` y `pull_request`, el workflow ejecuta las comprobaciones de dependencias, formato, lint y pruebas locales. Chromium se instala solo en la ejecución manual; esa ejecución añade las pruebas de navegador.
+
+Para ejecutar integración manualmente:
 
 1. Abrí **Actions** en GitHub.
 2. Elegí **UI tests**.
