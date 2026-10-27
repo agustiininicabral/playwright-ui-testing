@@ -6,9 +6,9 @@ Framework de QA Automation para probar la interfaz de login de [Practice Test Au
 
 ## Alcance y casos
 
-La suite contiene 10 casos recopilables:
+La suite contiene 10 tests:
 
-- **2 locales de configuración:** comprueban las marcas pytest y la presencia de archivos de configuración, sin navegador ni red.
+- **2 locales de configuración:** comprueban los marcadores pytest y la presencia de archivos de configuración, sin navegador ni red.
 - **4 locales de navegador:** prueban la carga del formulario, login exitoso y dos variantes de credenciales inválidas sobre una página fixture incluida en el repositorio. Requieren Chromium, pero no acceden a Internet.
 - **4 de integración:** ejecutan los escenarios principales contra el sitio público Practice Test Automation. Requieren Chromium y acceso a Internet.
 
@@ -18,12 +18,10 @@ El proyecto no prueba campos vacíos porque no hay un comportamiento esperado pa
 
 - Python 3.10 o posterior.
 - Python validado en el entorno local: **3.12.10**. GitHub Actions ejecuta con Python **3.12**.
-- Chromium de Playwright para las pruebas de integración.
+- Chromium de Playwright para las pruebas de navegador.
 - Conexión a Internet para instalar dependencias y acceder al sitio durante integración.
 
-Las versiones directas están fijadas en `requirements.txt`: pytest 8.4.2, Playwright 1.63.0, pytest-playwright 0.10.0 y pytest-html 4.2.0. pytest-playwright está fijado como dependencia directa, aunque estos tests conservan sus fixtures propios en `tests/conftest.py` y no usan los fixtures del plugin.
-
-Las dependencias transitivas no están fijadas en un lockfile, así que estos pins no garantizan una instalación completamente reproducible.
+Las dependencias directas están declaradas en `requirements.txt`; `requirements-dev.txt` agrega Ruff. `requirements-lock.txt` fija las versiones de las dependencias directas y transitivas observadas en la ejecución verificada de CI. El archivo fija versiones, pero no incluye hashes de artefactos. pytest-playwright está fijado como dependencia directa, aunque estos tests conservan sus fixtures propios en `tests/conftest.py` y no usan los fixtures del plugin.
 
 ## Instalación en Windows PowerShell
 
@@ -32,7 +30,7 @@ Desde la raíz del proyecto:
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements-dev.txt
+python -m pip install -r requirements-dev.txt -c requirements-lock.txt
 python -m playwright install chromium
 ```
 
@@ -72,6 +70,7 @@ python -m pytest -q
 ## Marcadores pytest
 
 - `local`: verificaciones de estructura y configuración que no acceden al sitio.
+- `local_browser`: pruebas de navegador deterministas contra la fixture local.
 - `integration`: pruebas de navegador que acceden al sitio público externo.
 
 ## Checks de calidad
@@ -84,11 +83,11 @@ python -m ruff format --check tests
 python -m ruff check tests
 ```
 
-`requirements-dev.txt` incluye las dependencias de ejecución y la versión fijada de Ruff. La configuración está en `pyproject.toml`.
+La configuración de Ruff está en `pyproject.toml`.
 
 ## GitHub Actions
 
-En cada `push` y `pull_request`, el workflow ejecuta las comprobaciones de dependencias, formato, lint, pruebas locales y los cuatro escenarios de navegador contra la fixture incluida. Chromium se instala en CI para esas pruebas deterministas. La ejecución manual añade además los cuatro escenarios de integración contra el sitio público.
+En cada `push` y `pull_request`, el workflow instala las versiones fijadas, comprueba dependencias, formato y lint, y ejecuta los tests locales y los cuatro escenarios de navegador contra la fixture incluida. Chromium se instala en CI para esas pruebas deterministas. La ejecución manual añade además los cuatro escenarios de integración contra el sitio público.
 
 Para ejecutar integración manualmente:
 
@@ -96,15 +95,15 @@ Para ejecutar integración manualmente:
 2. Elegí **UI tests**.
 3. Seleccioná **Run workflow**.
 
-La ejecución manual corre primero los tests locales y luego las pruebas de integración. El workflow instala dependencias y Chromium en Ubuntu con Python 3.12. Al finalizar, carga los reportes HTML y las capturas como artefacto `ui-test-evidence`, incluso si hay fallos. El token de Actions tiene permiso de solo lectura sobre el contenido del repositorio. No se usan secretos de GitHub en los tests.
+La ejecución manual corre primero los tests locales y luego las pruebas de integración. Al finalizar, carga los reportes HTML y las capturas como artefacto `ui-test-evidence`, incluso si hay fallos. El token de Actions tiene permiso de solo lectura sobre el contenido del repositorio. No se usan secretos de GitHub en los tests.
 
 ## Evidencia verificada de CI
 
-- [Ejecución de GitHub Actions — 27 de octubre de 2026](https://github.com/agustiininicabral/playwright-ui-testing/actions/runs/40449062761): **success**.
-- Pasaron los **2 checks locales** y los **4 tests de navegador deterministas** sobre la fixture incluida.
+- [Ejecución de GitHub Actions — 27 de octubre de 2026](https://github.com/agustiininicabral/playwright-ui-testing/actions/runs/40450626918): **success**.
+- Pasaron los **2 tests locales** y los **4 tests de navegador deterministas** sobre la fixture incluida.
 - `pip check`, formato y lint de Ruff finalizaron correctamente.
 - Los 4 tests de integración contra el sitio público se ejecutan manualmente para evitar que la disponibilidad de un tercero vuelva inestable cada `push` o pull request.
-- El workflow guarda reportes HTML y capturas como artefacto cuando existen. La ejecución citada corresponde al código de tests actual; los cambios posteriores solo actualizaron las versiones de las acciones de CI y el límite de tiempo.
+- El artefacto `ui-test-evidence` incluye el reporte HTML de navegador de esa ejecución.
 
 ## Evidencias y datos
 
@@ -116,7 +115,7 @@ Se usan únicamente las credenciales públicas de demostración documentadas por
 
 - Las pruebas de integración dependen de un servicio público ajeno al proyecto; cambios, indisponibilidad o conectividad pueden afectar los resultados.
 - Python 3.12 es la única versión ejecutada por CI; otras versiones no están validadas por el workflow.
-- Los pins de dependencias directas no fijan sus dependencias transitivas.
+- Las dependencias están fijadas por versión, pero el lock no verifica hashes de artefactos.
 - Los tests cubren el flujo de login de demostración, no autenticación de una aplicación bajo control del proyecto.
 
 ## Licencia
