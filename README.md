@@ -98,6 +98,14 @@ Para ejecutar integración manualmente:
 
 La ejecución manual corre primero los tests locales y luego las pruebas de integración. El workflow instala dependencias y Chromium en Ubuntu con Python 3.12. Al finalizar, carga los reportes HTML y las capturas como artefacto `ui-test-evidence`, incluso si hay fallos. El token de Actions tiene permiso de solo lectura sobre el contenido del repositorio. No se usan secretos de GitHub en los tests.
 
+## Evidencia verificada de CI
+
+- [Ejecución de GitHub Actions — 27 de octubre de 2026](https://github.com/agustiininicabral/playwright-ui-testing/actions/runs/40449062761): **success**.
+- Pasaron los **2 checks locales** y los **4 tests de navegador deterministas** sobre la fixture incluida.
+- `pip check`, formato y lint de Ruff finalizaron correctamente.
+- Los 4 tests de integración contra el sitio público se ejecutan manualmente para evitar que la disponibilidad de un tercero vuelva inestable cada `push` o pull request.
+- El workflow guarda reportes HTML y capturas como artefacto cuando existen. La ejecución citada corresponde al código de tests actual; los cambios posteriores solo actualizaron las versiones de las acciones de CI y el límite de tiempo.
+
 ## Evidencias y datos
 
 Ante un fallo, `tests/conftest.py` intenta guardar una captura en `screenshots/`. La ejecución de integración en CI genera `reports/integration-report.html`. No están configuradas trazas ni grabación de video.
