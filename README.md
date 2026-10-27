@@ -29,7 +29,7 @@ Desde la raíz del proyecto:
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 python -m playwright install chromium
 ```
 
@@ -64,9 +64,21 @@ python -m pytest -q
 - `local`: verificaciones de estructura y configuración que no acceden al sitio.
 - `integration`: pruebas de navegador que acceden al sitio público externo.
 
+## Checks de calidad
+
+Ejecuta estos controles desde la raíz del repositorio:
+
+```powershell
+python -m pip check
+python -m ruff format --check tests
+python -m ruff check tests
+```
+
+`requirements-dev.txt` incluye las dependencias de ejecución y la versión fijada de Ruff. La configuración está en `pyproject.toml`.
+
 ## GitHub Actions
 
-En cada `push` y `pull_request`, el workflow ejecuta solo las pruebas locales. Para ejecutar integración manualmente:
+En cada `push` y `pull_request`, el workflow ejecuta las comprobaciones de dependencias, formato, lint y pruebas locales. Chromium se instala solo en la ejecución manual; esa ejecución añade las pruebas de navegador.
 
 1. Abrí **Actions** en GitHub.
 2. Elegí **UI tests**.
